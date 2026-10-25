@@ -6,4 +6,4 @@ class Pasta_extensao(enum.Enum):
     DOCUMENTOS = '.pdf', '.docx', '.txt', '.xlsx'
     EXECUTAVEIS = '.exe', '.msi'
     CODIGOS = '.py', '.js', '.html', '.css'
-
+    
