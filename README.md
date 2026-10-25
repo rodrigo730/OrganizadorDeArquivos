@@ -1,8 +1,11 @@
 # OrganizadorDeArquivos 
+
+## 📌 Sobre o Projeto
+ Automação em Python, modular e focado em manter pastas organizadas, limpas e livres de ficheiros duplicados.
+ 
+---
 [![Status do Projeto](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=for-the-badge&logo=git&logoColor=white)](https://github.com/rodrigo730/OrganizadorDeArquivos)
 ![Python](https://img.shields.io/badge/python-%233670A0.svg?style=for-the-badge&logo=python&logoColor=ffdd54)
-
-> Automação em Python, modular e focado em manter pastas organizadas, limpas e livres de ficheiros duplicados.
 ---
 
 ## 🎯 O Problema
