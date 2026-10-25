@@ -7,6 +7,3 @@ class Pasta_extensao(enum.Enum):
     EXECUTAVEIS = '.exe', '.msi'
     CODIGOS = '.py', '.js', '.html', '.css'
 
-if __name__ == '__main__':
-    for x in Pasta_extensao:
-        print(x)
