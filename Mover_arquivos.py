@@ -1,10 +1,10 @@
 import os 
 import shutil
-import Organizador_diretorio, Gerador_relatorio
+import organizador_diretorio, gerador_relatorio
 
 
-extensoes = Organizador_diretorio.Pasta_extensao
-arquivo_log = Gerador_relatorio
+extensoes = organizador_diretorio.Pasta_extensao
+arquivo_log = gerador_relatorio
 
 
 while True:
