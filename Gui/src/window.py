@@ -40,15 +40,20 @@ class MyWindow(QMainWindow):
         self._layout_botoes = QGridLayout()
 
         label = MyLabel('Digite o Caminho')
-        input__ = MyInput()
+        self.label2 = MyLabel("Status: ")
+        self.label2.setTextInteractionFlags
+        self.input__ = MyInput()
         self.icon = QIcon(str(FILE_ICON_PATH))
-        botao1 = QPushButton('Organizar')
-        botao1.setProperty('cssClass', 'special')
-        botao1.clicked.connect(lambda: self.make_action(input__.text()))
+        self.botao1 = QPushButton('Organizar')
+        self.botao1.setProperty('cssClass', 'special')
+        self.botao1.setChecked(True)
+        self.botao1.clicked.connect(lambda: self.make_action(self.input__.text()))
         
         self.adding_wid(label,1,1)
-        self.adding_wid(input__,1,2)
-        self.adding_wid(botao1,2,2)
+        self.adding_wid(self.label2,2, 1)
+        self.adding_wid(self.input__,1,2)
+        self.adding_wid(self.botao1,2,2)
+        
 
         self.setCentralWidget(self.central_widget_)
         self.central_widget_.setLayout(self._layout_label)
@@ -67,7 +72,14 @@ class MyWindow(QMainWindow):
         self.setFixedSize(350, 100)
         self.adjustSize()
     def make_action(self, value):
-        mover_arquivos.mover_arquivos(value)
+        if not value:
+            self.label2.setText("Status: \nCaminho não encontrado")
+        else:
+            mover_arquivos.mover_arquivos(value)
+            self.label2.setText("Status:\n Arquivos Movidos!!")
+            if not self.botao1.isChecked():
+                self.input__.clear()
+        print()
 class MyLabel(QLabel):
     def __init__(self,*args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -88,7 +100,7 @@ class MyInput(QLineEdit):
             self.styling_widgets(self, 
                                 'lightgray; color: black'
                                 )
-            self.setPlaceholderText('Digite aqui')
+            self.setPlaceholderText('Digite o caminho')
             
     def styling_widgets(self, a_widget: QWidget, msg: str):
                     a_widget.setStyleSheet(msg)

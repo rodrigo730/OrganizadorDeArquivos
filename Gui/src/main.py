@@ -1,6 +1,4 @@
 from PySide6.QtWidgets import QApplication
-
-
 from window import MyWindow, setting_style
 import sys 
 
