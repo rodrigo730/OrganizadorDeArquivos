@@ -1,9 +1,9 @@
 import os 
 import shutil
-import organizador_diretorio, gerador_relatorio
+import organizador_extensao, gerador_relatorio
 
 
-extensoes = organizador_diretorio.Pasta_extensao
+extensoes = organizador_extensao.Pasta_extensao
 arquivo_log = gerador_relatorio
 
 def mover_arquivos(caminho_usuario):

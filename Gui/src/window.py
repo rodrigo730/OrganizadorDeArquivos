@@ -6,6 +6,7 @@ from PySide6.QtWidgets import  (QMainWindow,
                                 QLineEdit,
                                 QPushButton
                                 )
+from PySide6.QtCore import QTimer
 from paths_files import FILE_ICON_PATH
 from PySide6.QtGui import QIcon
 import qdarkstyle
@@ -48,7 +49,7 @@ class MyWindow(QMainWindow):
         self.botao1.setProperty('cssClass', 'special')
         self.botao1.setChecked(True)
         self.botao1.clicked.connect(lambda: self.make_action(self.input__.text()))
-        
+        self.make_action_status = True
         self.adding_wid(label,1,1)
         self.adding_wid(self.label2,2, 1)
         self.adding_wid(self.input__,1,2)
@@ -71,15 +72,29 @@ class MyWindow(QMainWindow):
     def fixing_size(self):
         self.setFixedSize(350, 100)
         self.adjustSize()
+
+    
     def make_action(self, value):
+        
         if not value:
             self.label2.setText("Status: \nCaminho não encontrado")
+            QTimer.singleShot(3000,lambda: self.label2.setText("Status: "))
         else:
             mover_arquivos.mover_arquivos(value)
-            self.label2.setText("Status:\n Arquivos Movidos!!")
+            if self.make_action_status:
+                self.label2.setText("Status:\n Arquivos movidos!!")
+                QTimer.singleShot(3000, lambda: self.label2.setText("Status: "))
+                self.make_action_status = False
+            else: 
+                self.label2.setText("Status:\n arquivos já movidos!!")
+                QTimer.singleShot(3000, 
+                                lambda: 
+                                self.label2.setText(
+                                                    "Status: "
+                                                    )
+                                )
             if not self.botao1.isChecked():
                 self.input__.clear()
-        print()
 class MyLabel(QLabel):
     def __init__(self,*args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
