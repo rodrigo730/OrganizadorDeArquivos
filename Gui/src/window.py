@@ -4,7 +4,8 @@ from PySide6.QtWidgets import  (QMainWindow,
                                 QGridLayout, 
                                 QLabel, 
                                 QLineEdit,
-                                QPushButton
+                                QPushButton,
+                                QMessageBox
                                 )
 from PySide6.QtCore import QTimer
 from paths_files import FILE_ICON_PATH
@@ -41,17 +42,14 @@ class MyWindow(QMainWindow):
         self._layout_botoes = QGridLayout()
 
         label = MyLabel('Digite o Caminho')
-        self.label2 = MyLabel("Status: ")
-        self.label2.setTextInteractionFlags
         self.input__ = MyInput()
         self.icon = QIcon(str(FILE_ICON_PATH))
         self.botao1 = QPushButton('Organizar')
         self.botao1.setProperty('cssClass', 'special')
         self.botao1.setChecked(True)
         self.botao1.clicked.connect(lambda: self.make_action(self.input__.text()))
-        self.make_action_status = True
+        self.make_action_status = mover_arquivos.mover_arquivos
         self.adding_wid(label,1,1)
-        self.adding_wid(self.label2,2, 1)
         self.adding_wid(self.input__,1,2)
         self.adding_wid(self.botao1,2,2)
         
@@ -73,26 +71,28 @@ class MyWindow(QMainWindow):
         self.setFixedSize(350, 100)
         self.adjustSize()
 
+    def make_mensage_box(self):
+        return QMessageBox(self)
+
+    def _show_error(self, text: str):
+        _box_mensage = self.make_mensage_box()
+        _box_mensage.setText(text)
+        _box_mensage.setIcon(_box_mensage.Icon.Information)
+        QTimer.singleShot(3000, _box_mensage.accept)
+        _box_mensage.exec()
+        
     
     def make_action(self, value):
         
         if not value:
-            self.label2.setText("Status: \nCaminho não encontrado")
-            QTimer.singleShot(3000,lambda: self.label2.setText("Status: "))
+            self._show_error("Status: \nCaminho não encontrado")
+            return
         else:
-            mover_arquivos.mover_arquivos(value)
-            if self.make_action_status:
-                self.label2.setText("Status:\n Arquivos movidos!!")
-                QTimer.singleShot(3000, lambda: self.label2.setText("Status: "))
-                self.make_action_status = False
-            else: 
-                self.label2.setText("Status:\n arquivos já movidos!!")
-                QTimer.singleShot(3000, 
-                                lambda: 
-                                self.label2.setText(
-                                                    "Status: "
-                                                    )
-                                )
+            if mover_arquivos.mover_arquivos(value):
+                self._show_error('Status: \nArquivos Movidos')
+                self.make_action_status = True
+            elif self.make_action_status:
+                self._show_error('Status: \nArquivos já Movidos')
             if not self.botao1.isChecked():
                 self.input__.clear()
 class MyLabel(QLabel):
@@ -119,3 +119,5 @@ class MyInput(QLineEdit):
             
     def styling_widgets(self, a_widget: QWidget, msg: str):
                     a_widget.setStyleSheet(msg)
+
+    

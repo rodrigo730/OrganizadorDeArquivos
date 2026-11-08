@@ -11,6 +11,7 @@ def mover_arquivos(caminho_usuario):
         PASTA_NOVA = os.path.join(PASTA_PRINCIPAL, f'{caminho_usuario}')
         arquivo_log.criar_log(PASTA_NOVA)
         arquivo_log.logging.info("Inicio execução")
+        houver_movimentacao = False
         for pasta, subpasta, arquivo in os.walk(PASTA_NOVA):
             for x in arquivo:
                 nome, extensao = os.path.splitext(x)
@@ -46,6 +47,11 @@ def mover_arquivos(caminho_usuario):
                             continue
                         else:
                                 print('Arquivo movido')
-                                shutil.move(arquivo_pasta_raiz, caminho_nova_pasta)         
+                                shutil.move(arquivo_pasta_raiz, caminho_nova_pasta)     
+                                houver_movimentacao = True
         arquivo_log.logging.info("Fim da execução") 
+        return houver_movimentacao
+
+
+
 
