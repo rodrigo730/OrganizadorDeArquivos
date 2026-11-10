@@ -1,12 +1,17 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
+
+FILES_DIR = os.path.join(SPECPATH, 'Gui', 'files')
+ROOT_DIR = SPECPATH
 
 a = Analysis(
-    ['Mover_arquivos.py'],
-    pathex=[],
+    ['Gui\\src\\main.py'],
+    pathex=[os.path.join(SPECPATH, 'Gui', 'src'),
+    SPECPATH,],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=[('Gui/files', 'files')],
+    hiddenimports=['mover_arquivos'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -22,17 +27,18 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Mover_arquivos',
+    name='OrganizadorDeArquivos',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['Gui/files/python-logo-only.png'],
 )

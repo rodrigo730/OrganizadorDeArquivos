@@ -8,4 +8,4 @@ PATH_ABSOLUTE = Path(__file__).resolve()
 PATH_FOLDER_ABSOLUTE = PATH_ABSOLUTE.parents[2]
 sys.path.append(str(PATH_FOLDER_ABSOLUTE))
 print(PATH_FOLDER_ABSOLUTE)
-# print(sys.path)
+print(sys.path)

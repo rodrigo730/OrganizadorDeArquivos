@@ -12,6 +12,7 @@ from paths_files import FILE_ICON_PATH
 from PySide6.QtGui import QIcon
 import qdarkstyle
 import mover_arquivos
+
 PRIMARY_COLOR = '#385187'
 DARKER_PRIMARY_COLOR = '#2d416c'
 DARKEST_PRIMARY_COLOR = '#243456'
@@ -44,11 +45,11 @@ class MyWindow(QMainWindow):
         label = MyLabel('Digite o Caminho')
         self.input__ = MyInput()
         self.icon = QIcon(str(FILE_ICON_PATH))
+
         self.botao1 = QPushButton('Organizar')
         self.botao1.setProperty('cssClass', 'special')
         self.botao1.setChecked(True)
         self.botao1.clicked.connect(lambda: self.make_action(self.input__.text()))
-        self.make_action_status = mover_arquivos.mover_arquivos
         self.adding_wid(label,1,1)
         self.adding_wid(self.input__,1,2)
         self.adding_wid(self.botao1,2,2)
@@ -78,7 +79,7 @@ class MyWindow(QMainWindow):
         _box_mensage = self.make_mensage_box()
         _box_mensage.setText(text)
         _box_mensage.setIcon(_box_mensage.Icon.Information)
-        QTimer.singleShot(3000, _box_mensage.accept)
+        QTimer.singleShot(2500, _box_mensage.accept)
         _box_mensage.exec()
         
     

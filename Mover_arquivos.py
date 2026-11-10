@@ -53,5 +53,3 @@ def mover_arquivos(caminho_usuario):
         return houver_movimentacao
 
 
-
-
