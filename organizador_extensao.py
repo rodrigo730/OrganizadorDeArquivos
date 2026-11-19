@@ -5,7 +5,9 @@ import json
 
 PATH = pathlib.Path(__file__).parent / 'extensoes.json'
 
-
+teste = None
+with open(PATH, 'r', encoding='utf8') as a:
+    teste = json.load(a)
 class Pasta_extensao(enum.Enum):
     ...
     # Valores padrão 
@@ -14,20 +16,17 @@ class Pasta_extensao(enum.Enum):
     # EXECUTAVEIS = '.exe', '.msi' 
     # CODIGOS = '.py', '.js', '.html', '.css'
 
-teste = None
-with open(PATH, 'r', encoding='utf8') as a:
-    teste = json.load(a)
+
 for x in teste.items():
     chave, valor = x
     aenum.extend_enum(Pasta_extensao, chave, *valor)
-    # print(chave, valor)
-
-# print(dict_)
 
 def creating_extension(value, *args):
     resposta_formatada = value.replace(' ', '_').upper()
     if resposta_formatada in Pasta_extensao.__members__:
                     return None
+    if resposta_formatada in Pasta_extensao._member_names_:
+        return None
     aenum.extend_enum(Pasta_extensao,
                     f'{resposta_formatada}', 
                     args
@@ -36,5 +35,3 @@ def creating_extension(value, *args):
     with open(PATH, 'w',encoding='utf8') as a:
         json.dump(valor, a,indent=2)
     return valor
-
-print([x.name for x in Pasta_extensao])
