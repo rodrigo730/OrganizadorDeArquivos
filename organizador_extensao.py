@@ -35,3 +35,6 @@ def creating_extension(value, *args):
     with open(PATH, 'w',encoding='utf8') as a:
         json.dump(valor, a,indent=2)
     return valor
+
+# if __name__ == '__main__':
+#       creating_extension('teste', '')
