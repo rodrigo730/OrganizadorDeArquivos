@@ -2,6 +2,7 @@ import  aenum
 import enum
 import pathlib 
 import json
+import re
 
 PATH = pathlib.Path(__file__).parent / 'extensoes.json'
 
@@ -19,22 +20,33 @@ class Pasta_extensao(enum.Enum):
 
 for x in teste.items():
     chave, valor = x
-    aenum.extend_enum(Pasta_extensao, chave, *valor)
+    aenum.extend_enum(Pasta_extensao, chave, tuple(valor))
 
-def creating_extension(value, *args):
+
+def creating_extension(value, *args: str):
+    teste = ' '.join(args)
+    extensoes = re.findall(r'\.[a-zA-Z0-9]+', teste)
+    # print(type(extensoes))
     resposta_formatada = value.replace(' ', '_').upper()
     if resposta_formatada in Pasta_extensao.__members__:
                     return None
     if resposta_formatada in Pasta_extensao._member_names_:
         return None
-    aenum.extend_enum(Pasta_extensao,
-                    f'{resposta_formatada}', 
-                    args
-                    )
+    if len(extensoes)== 1 :
+        aenum.extend_enum(Pasta_extensao,
+                            f'{resposta_formatada}', 
+                            tuple(extensoes)
+                            )
+    else:
+        aenum.extend_enum(Pasta_extensao,
+                        f'{resposta_formatada}', 
+                        *extensoes
+                        )
     valor = {x.name: x.value for x in Pasta_extensao}
+    print(valor)
     with open(PATH, 'w',encoding='utf8') as a:
-        json.dump(valor, a,indent=2)
+            json.dump(valor, a,indent=2)
     return valor
 
-# if __name__ == '__main__':
-#       creating_extension('teste', '')
+if __name__ == '__main__':
+    creating_extension('test1311111', '.aawweeee, .wowoe,.wqowiweiw')

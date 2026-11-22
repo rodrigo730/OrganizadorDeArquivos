@@ -1,87 +1,43 @@
 import sys
+from random import randint
+
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QPushButton,
-    QVBoxLayout, QWidget, QCheckBox, QLabel,
-    QSlider, QComboBox, QLineEdit
+    QApplication,
+    QLabel,
+    QMainWindow,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtGui import QPalette, QColor
-from PySide6.QtCore import Qt
 
 
-def create_dark_palette():
-    """Create a dark color palette for the Fusion style."""
-    palette = QPalette()
+class AnotherWindow(QWidget):
+    """
+    This "window" is a QWidget. If it has no parent, it
+    will appear as a free-floating window as we want.
+    """
 
-    # Base colors
-    palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
-    palette.setColor(QPalette.ColorRole.WindowText, QColor(255, 255, 255))
-    palette.setColor(QPalette.ColorRole.Base, QColor(35, 35, 35))
-    palette.setColor(QPalette.ColorRole.AlternateBase, QColor(53, 53, 53))
-    palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(25, 25, 25))
-    palette.setColor(QPalette.ColorRole.ToolTipText, QColor(255, 255, 255))
-    palette.setColor(QPalette.ColorRole.Text, QColor(255, 255, 255))
-    palette.setColor(QPalette.ColorRole.Button, QColor(53, 53, 53))
-    palette.setColor(QPalette.ColorRole.ButtonText, QColor(255, 255, 255))
-    palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
-    palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))
-    palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
-    palette.setColor(QPalette.ColorRole.HighlightedText, QColor(35, 35, 35))
-
-    # Disabled state
-    palette.setColor(
-        QPalette.ColorGroup.Disabled,
-        QPalette.ColorRole.WindowText,
-        QColor(127, 127, 127),
-    )
-    palette.setColor(
-        QPalette.ColorGroup.Disabled,
-        QPalette.ColorRole.Text,
-        QColor(127, 127, 127),
-    )
-    palette.setColor(
-        QPalette.ColorGroup.Disabled,
-        QPalette.ColorRole.ButtonText,
-        QColor(127, 127, 127),
-    )
-    palette.setColor(
-        QPalette.ColorGroup.Disabled,
-        QPalette.ColorRole.HighlightedText,
-        QColor(127, 127, 127),
-    )
-
-    return palette
+    def __init__(self):
+        super().__init__()
+        layout = QVBoxLayout()
+        self.label = QLabel("Another Window % d" % randint(0, 100))
+        layout.addWidget(self.label)
+        self.setLayout(layout)
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Dark Fusion Theme")
+        self.w = AnotherWindow()
+        self.button = QPushButton("Push for Window")
+        self.button.clicked.connect(self.show_new_window)
+        self.setCentralWidget(self.button)
 
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("Dark Fusion palette example"))
-        layout.addWidget(QLineEdit("Editable text"))
-        layout.addWidget(QPushButton("Enabled Button"))
-
-        disabled_btn = QPushButton("Disabled Button")
-        disabled_btn.setEnabled(False)
-        layout.addWidget(disabled_btn)
-
-        layout.addWidget(QCheckBox("A checkbox option"))
-        layout.addWidget(QSlider(Qt.Orientation.Horizontal))
-
-        combo = QComboBox()
-        combo.addItems(["First", "Second", "Third"])
-        layout.addWidget(combo)
-
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
+    def show_new_window(self, checked):
+        self.w.show()
 
 
 app = QApplication(sys.argv)
-app.setStyle("Fusion")
-app.setPalette(create_dark_palette())
-
 window = MainWindow()
 window.show()
-sys.exit(app.exec())
+app.exec()
