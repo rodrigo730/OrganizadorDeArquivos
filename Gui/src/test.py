@@ -1,91 +1,64 @@
-# Source - https://stackoverflow.com/a/76512736
-# Posted by JordiBujons
-# Retrieved 2026-11-22, License - CC BY-SA 4.0
-
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QComboBox
-from PySide6.QtCore import Qt, QEvent
-from PySide6.QtGui import QStandardItem
 
-class CheckableComboBox(QComboBox):
-    def __init__(self, parent=None):
-        super(CheckableComboBox,self).__init__(parent)
-        self.setEditable(True)
-        #self.lineEdit().setReadOnly(True)
-        self.closeOnLineEditClick = False
-        self.lineEdit().installEventFilter(self)
-        self.model().dataChanged.connect(self.updateLineEditField)
-    
-    def eventFilter(self, widget, event: QEvent) -> bool:
-        if widget == self.lineEdit():
-            if event.type() == QEvent.Type.MouseButtonPress:
-                if self.closeOnLineEditClick:
-                    print("hide")
-                    self.hidePopup()
-                else:
-                    print("show")
-                    self.showPopup()
-                    self.closeOnLineEditClick = True
-                return True
-        return super().eventFilter(widget, event)
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QFormLayout,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
-    def addItems(self, items, itemList=None):
-        itemList = [] if itemList is None else itemList
-        for indx, text in enumerate(items):
-            try:
-                data = itemList[indx]
-            except(IndexError):
-                data = None
-            self.addItem(text,data)
-            
 
-    def addItem(self,text,userData=None):
-        item = QStandardItem()
-        item.setText(text)
-        if not userData is None:
-            item.setData(userData)
-        
-        item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsUserCheckable)
-        item.setData(Qt.CheckState.Unchecked, Qt.ItemDataRole.CheckStateRole)
-        self.model().appendRow(item)
-    
-    def updateLineEditField(self):
-        text_container = []
-        for i in range(self.model().rowCount()):
-            if self.model().item(i).checkState() == Qt.CheckState.Checked:
-                text_container.append(self.model().item(i).text())
-
-        text_string=', '.join(text_container)
-        self.lineEdit().setText(text_string)
-
-class MyApp(QWidget):
-    def __init__(self):
+class PreferencesForm(QWidget):
+    def __init__(self) -> None:
         super().__init__()
-        self.window_width, self.window_height = 1200,800
-        self.setMinimumSize(self.window_width, self.window_height)
-        self.setStyleSheet('''
-            QWidget {
-                font-size: 10px;
-            }
-        ''')
+        self.setWindowTitle("Preferências")
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        self.theme_combo = QComboBox()
+        self.theme_combo.addItem("Claro", "light")
+        self.theme_combo.addItem("Escuro", "dark")
+        self.theme_combo.addItem("Sistema", "system")
 
-        combobox = CheckableComboBox()
-        combobox.addItems(colors)
-        self.layout.addWidget(combobox)
+        self.category_combo = QComboBox()
+        self.category_combo.addItem("Selecione...", None)
+        self.category_combo.addItem("Interfaces gráficas", "gui")
+        self.category_combo.addItem("Fundamentos", "basics")
 
-    def closeEvent(self, event):
-        event.accept()
+        self.summary = QLabel()
+        self.save_button = QPushButton("Salvar")
+        self.save_button.setEnabled(False)
 
-if __name__ == '__main__':
-    colors=["Blue", "Yellow", "Green", "Red"]
-    app = QApplication(sys.argv)
-    myApp = MyApp()
-    myApp.show()
+        form = QFormLayout()
+        form.addRow("Tema", self.theme_combo)
+        form.addRow("Categoria", self.category_combo)
 
-    try:
-        sys.exit(app.exec())
-    except SystemExit:
-        print("Closing window...")
+        layout = QVBoxLayout(self)
+        layout.addLayout(form)
+        layout.addWidget(self.summary)
+        layout.addWidget(self.save_button)
+
+        self.category_combo.currentIndexChanged.connect(self.update_state)
+        self.theme_combo.currentIndexChanged.connect(self.update_state)
+        self.save_button.clicked.connect(self.save)
+        self.update_state()
+
+    def update_state(self, _index: int = -1) -> None:
+        category_id = self.category_combo.currentData()
+        theme_id = self.theme_combo.currentData()
+        ready = category_id is not None
+        self.save_button.setEnabled(ready)
+        self.summary.setText(
+            f"Tema: {theme_id} | Categoria: {category_id or 'não definida'}"
+        )
+
+    def save(self) -> None:
+        category_id = self.category_combo.currentData()
+        self.summary.setText(f"Preferências salvas para {category_id}.")
+
+
+app = QApplication(sys.argv)
+window = PreferencesForm()
+window.show()
+sys.exit(app.exec())

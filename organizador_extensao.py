@@ -28,9 +28,9 @@ def creating_extension(value, *args: str):
     extensoes = re.findall(r'\.[a-zA-Z0-9]+', teste)
     resposta_formatada = value.replace(' ', '_').upper()
     if resposta_formatada in Pasta_extensao.__members__:
-                    return None
-    if resposta_formatada in Pasta_extensao._member_names_:
-        return None
+                    return False
+    elif resposta_formatada in Pasta_extensao._member_names_:
+        return False
     if len(extensoes) == 1 :
         aenum.extend_enum(Pasta_extensao,
                             f'{resposta_formatada}', 

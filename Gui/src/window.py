@@ -8,7 +8,7 @@ from PySide6.QtWidgets import  (QMainWindow,
                                 QComboBox,
                                 QVBoxLayout
                                 )
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, Qt
 from paths_files import FILE_ICON_PATH
 from PySide6.QtGui import QIcon
 import qdarkstyle
@@ -32,7 +32,23 @@ qss = f"""
                     color: #fff;
                     background: {DARKEST_PRIMARY_COLOR}
         }}
+        QPushButton[cssClass="success"] {{
+        color: #ffffff;
+        background-color: #2E7D32;
+        border-radius: 6px;
+        font-weight: bold;
+        padding: 6px 12px;
+        }}
+
+        QPushButton[cssClass="success"]:hover {{
+            background-color: #388E3C;
+        }}
+
+        QPushButton[cssClass="success"]:pressed {{
+            background-color: #1B5E20;
+        }}
 """
+
 def setting_style(app):
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyside6())
     app.setStyleSheet(app.styleSheet() + qss)
@@ -45,7 +61,7 @@ class window_extension(QWidget):
         self.setLayout(self._layout)
         self.fixing_size()
         self.setWindowTitle("Adicionar Extensão")
-
+        self.move(900,280)
     def fixing_size(self):
             self.setFixedSize(300, 200)
             self.adjustSize()
@@ -85,7 +101,7 @@ class MyWindow(QMainWindow):
         self.botao1.setProperty('cssClass', 'special')
         self.adding_extension.setProperty('cssClass', 'special')
         organizar.setProperty('cssClass', 'special')
-        
+        self.button_new_extensions.setProperty("cssClass", "success")
         self.adding_extension.setCheckable(True)
         self.button_new_extensions.setCheckable(True)
         
@@ -161,7 +177,7 @@ class MyWindow(QMainWindow):
         self.mycombobox.setVisible(True)
         self._window_new_extensions.adding_widgets(self.label_category, 
                                             self.mycombobox,
-                                            self.label_new_extension,
+                                            self.label_new_extension, 
                                             self.input_new_extensions_folder,
                                             self.input_new_extensions,
                                             self.button_new_extensions
@@ -198,7 +214,7 @@ class MyLabel(QLabel):
                             'border-width: 0px;'
                             'border-radius: 4px;'
                             )
-
+        self.setFixedSize(110,20)
     def styling_widgets(self, a_widget: QWidget, msg: str):
                 a_widget.setStyleSheet(msg)
 

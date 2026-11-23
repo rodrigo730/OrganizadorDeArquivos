@@ -21,16 +21,15 @@
     ".html",
     ".css"
   ],
-  "TESTE": [
-    ".ooooo",
-    ".pppppp",
-    ".iiiiiii"
+  "AUDIO": [
+    ".mp3",
+    ".waw"
   ],
-  "AAAAAAAAAAAA": [
-    ".opwpww"
+  "VIDEOS": [
+    ".mp4",
+    ".avi"
   ],
-  "AAAAAQSQQSQSQS": [
-    ".oqoqmsoqs",
-    ".opqkppskpqss"
+  "TESTET": [
+    ".pppp"
   ]
 }
