@@ -45,10 +45,14 @@ class window_extension(QWidget):
         self.setLayout(self._layout)
         self.fixing_size()
         self.setWindowTitle("Adicionar Extensão")
+
     def fixing_size(self):
             self.setFixedSize(300, 200)
             self.adjustSize()
-            
+    def adding_widgets(self, *args):
+        for x in range(len(args)):
+            self._layout.addWidget(args[x])
+
 class MyWindow(QMainWindow):
     def __init__(self, parent: QWidget| None = None, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -62,8 +66,8 @@ class MyWindow(QMainWindow):
         self.icon = QIcon(str(FILE_ICON_PATH))
         self.adding_extension = QPushButton('Extensões')
         self.botao1 = QPushButton('Organizar')
-        #Creating buttons window adding new extensions
 
+        #Creating buttons window adding new extensions
         self.mycombobox = MyComboBox()
         self.mycombobox.setVisible(False)
         self._window_new_extensions = window_extension()
@@ -83,36 +87,36 @@ class MyWindow(QMainWindow):
         organizar.setProperty('cssClass', 'special')
         
         self.adding_extension.setCheckable(True)
-        # self.adding_extension.setChecked(False)
-        self.appending_new_extensions()
-
-        self.botao1.clicked.connect(lambda: self.moving_files(self.input__.text()))
-        # self.adding_extension.clicked.connect(lambda: self.appending_new_extensions())
-        self.adding_extension.clicked.connect(lambda: self._creating_new_extensions_())
-        self._window_new_extensions._layout.addWidget(self.label_category)
-        self.button_new_extensions.clicked.connect(lambda: self.teste())
-
+        self.button_new_extensions.setCheckable(True)
         
-
-        self.adding_wid(organizar,0,0, 1,1)
-        self.adding_wid(self.input__, 1, 0, 1, 3)
-        self.adding_wid(self.botao1,2,0,1,2)
-        self.adding_wid(self.adding_extension, 0,1,1,1)
-
+        self.botao1.clicked.connect(
+                                        lambda: 
+                                        self.moving_files(self.input__.text())
+                                                )
+        self.adding_extension.clicked.connect(
+                                        lambda: 
+                                        self._creating_new_extensions_()
+                                                )
+        self.button_new_extensions.clicked.connect(
+                                        lambda: 
+                                        self.new_extensions_action()
+                                                )
+        self.appending_new_extensions()
+        self.adding_wid((organizar,0,0, 1,1),
+                        (self.input__, 1, 0, 1, 3),
+                        (self.botao1,2,0,1,2),
+                        (self.adding_extension, 0,1,1,1)
+                        )
 
         self.setCentralWidget(self.central_widget_)
         self.central_widget_.setLayout(self._layout_label)
-        
         self.setWindowTitle('Gerenciador de arquivos')
 
     def adding_wid(self, 
-                a_widget: QWidget, 
-                row: int,
-                col: int, 
-                rowspan: int, 
-                colsspan:int, 
+                   *args
                 ):
-        self._layout_label.addWidget(a_widget,row, col,rowspan, colsspan)
+        for x in args:
+            self._layout_label.addWidget(*x)
 
     def styling_widgets(self, a_widget: QWidget, msg: str):
         a_widget.setStyleSheet(msg)
@@ -145,43 +149,44 @@ class MyWindow(QMainWindow):
                 self.input__.clear()
 
     def appending_new_extensions(self):
-        
-        visivel = self.adding_extension.isChecked()
-        self.mycombobox.setVisible(visivel)
-        self.mycombobox.clear()
-        if  self.contador < len(organizador_extensao.Pasta_extensao):
-            for i in organizador_extensao.Pasta_extensao:
-                self.mycombobox.addItem(i.name)
-                self.contador +=1
-        
+        contador_teste = 0
+        for i in organizador_extensao.Pasta_extensao:
+                        self.mycombobox.addItem(i.name)
+                        contador_teste +=1
+        self.contador = contador_teste
         
     def _creating_new_extensions_(self):
-        visivel = self.adding_extension.isChecked()
-        self._window_new_extensions._layout.setSpacing(10)
-        self.mycombobox.setVisible(visivel)
-        self._window_new_extensions._layout.addWidget(self.mycombobox)
-        self._window_new_extensions._layout.addWidget(self.label_new_extension)
-        self._window_new_extensions._layout.addWidget(self.input_new_extensions_folder)
-        self._window_new_extensions._layout.addWidget(self.input_new_extensions)
-        self._window_new_extensions._layout.addWidget(self.button_new_extensions)
-
-        if self._window_new_extensions.isVisible():
-            self.input_new_extensions_folder.clear()
-            self.input_new_extensions.clear()
-            
-            self._window_new_extensions.hide()
-        else:
-            self._window_new_extensions.show()
-            
-
-    def teste(self):
+        self.mycombobox.clear()
+        self.appending_new_extensions()
+        self.mycombobox.setVisible(True)
+        self._window_new_extensions.adding_widgets(self.label_category, 
+                                            self.mycombobox,
+                                            self.label_new_extension,
+                                            self.input_new_extensions_folder,
+                                            self.input_new_extensions,
+                                            self.button_new_extensions
+                                                )
+        self.changing_visible_window()
+        
+    def new_extensions_action(self):
         folder = self.input_new_extensions_folder.text()
         extension = self.input_new_extensions.text()
         organizador_extensao.creating_extension(folder, extension)
+        self.appending_new_extensions()
+        self.changing_visible_window()
+
+    def changing_visible_window(self) :
+        if self._window_new_extensions.isVisible():
+            self.myclear()
+            self._window_new_extensions.close()  
+            return False
+        else:
+            self._window_new_extensions.show()
+            return True
+        
+    def myclear(self):
         self.input_new_extensions_folder.clear()
         self.input_new_extensions.clear()
-        self._window_new_extensions.hide()
-
 
 class MyLabel(QLabel):
     def __init__(self,*args, **kwargs) -> None:
